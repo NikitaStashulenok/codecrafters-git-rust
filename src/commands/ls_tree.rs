@@ -56,7 +56,7 @@ pub(crate) fn invoke(name_only: bool, tree_hash: &str) -> anyhow::Result<()> {
                         .write_all(name)
                         .context("write tree entry to stdout")?;
                 }
-                write!(stdout, "\n").context("write newline to stdout")?;
+                writeln!(stdout, "").context("write newline to stdout")?;
             }
         }
         _ => anyhow::bail!("don't yet know how to ls: {}", object.kind),
