@@ -35,6 +35,10 @@ enum Command {
     },
 }
 
+enum Kind {
+    Blob,
+}
+
 fn main() -> anyhow::Result<()> {
     let args = Args::parse();
 
@@ -67,8 +71,16 @@ fn main() -> anyhow::Result<()> {
             let header = header
                 .to_str()
                 .context(".git/objectss file header isn't valid UTF-8")?;
-            let Some(size) = header.strip_prefix("blob ") else {
-                anyhow::bail!(".git/objects file header did not start with 'blob ': {header}");
+
+            let Some((kind, size)) = header.split_once(' ') else {
+                anyhow::bail!(".git/objects file header did not start with known type: {header}");
+            };
+
+            let kind = match kind {
+                "blob" => Kind::Blob,
+                _ => {
+                    anyhow::bail!(".git/objects file header has unknown type: {kind}");
+                }
             };
 
             let size = size
@@ -84,9 +96,14 @@ fn main() -> anyhow::Result<()> {
 
             let stdout = std::io::stdout();
             let mut stdout = stdout.lock();
-            stdout
-                .write_all(&buf)
-                .context("write objects content to stdout")?;
+
+            match kind {
+                Kind::Blob => {
+                    stdout
+                        .write_all(&buf)
+                        .context("write objects content to stdout")?;
+                }
+            }
         }
     }
 
