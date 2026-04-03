@@ -1,12 +1,6 @@
-use anyhow::Context;
-use flate2::read::ZlibDecoder;
-use std::{
-    any,
-    ffi::CStr,
-    io::{BufReader, prelude::*},
-};
-
 use crate::objects::{Kind, Object};
+use anyhow::Context;
+use std::{ffi::CStr, io::prelude::*};
 
 pub(crate) fn invoke(name_only: bool, tree_hash: &str) -> anyhow::Result<()> {
     let mut object = Object::read(tree_hash).context("parse out tree object file")?;
