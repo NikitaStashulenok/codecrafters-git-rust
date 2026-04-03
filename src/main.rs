@@ -1,6 +1,6 @@
 use anyhow::Context;
 use clap::{Parser, Subcommand};
-use flate2::read::{GzDecoder, ZlibDecoder};
+use flate2::read::ZlibDecoder;
 #[allow(unused_imports)]
 use std::fs;
 use std::{
@@ -54,6 +54,10 @@ fn main() -> anyhow::Result<()> {
             pretty_print,
             object_hash,
         } => {
+            anyhow::ensure!(
+                pretty_print,
+                "mode must bi given without -p, and we don't support mode"
+            );
             // todo: support shortest uniq hashes
             let f = std::fs::File::open(format!(
                 ".git/objects/{}/{}",
