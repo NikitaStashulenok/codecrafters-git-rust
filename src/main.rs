@@ -1,7 +1,6 @@
 use anyhow::Context;
 use clap::{Parser, Subcommand};
 use flate2::read::ZlibDecoder;
-#[allow(unused_imports)]
 use std::fs;
 use std::{
     ffi::CStr,
@@ -88,36 +87,27 @@ fn main() -> anyhow::Result<()> {
             };
 
             let size = size
-                .parse::<usize>()
+                .parse::<u64>()
                 .context(".git/objects file header has invalid size: {size}")?;
-            buf.clear();
-            // buf.reserve_exact(size);
-            buf.resize(size, 0);
-            z.read_exact(&mut buf[..])
-                .context("read true content from .git/objects file is too short")?;
-            let n = z.read(&mut [0]).context("read trailing nul")?;
-            anyhow::ensure!(n == 0, "trailing nul in .git/objects file, had {n}");
-
-            let stdout = std::io::stdout();
-            let mut stdout = stdout.lock();
+            // NOTE: this won't error if the decompressed file is too long, but will at least not
+            // spam stdout and be vulberable to a zipbomb
+            let mut z = z.take(size);
 
             match kind {
                 Kind::Blob => {
-                    stdout
-                        .write_all(&buf)
-                        .context("write objects content to stdout")?;
+                    let stdout = std::io::stdout();
+                    let mut stdout = stdout.lock();
+                    let n = std::io::copy(&mut z, &mut stdout)
+                        .context("write .git/objects file into stdout")?;
+
+                    anyhow::ensure!(
+                        n == size as u64,
+                        ".git/objects file was not the expected size: expected: {size}, actual: {n}"
+                    );
                 }
             }
         }
     }
 
     Ok(())
-    // if args[1] == "cat-file" && args[2] == "-p" && args.len() == 4 {
-    //     let mut d = GzDecoder::new(args[3].as_bytes());
-    //     let mut s = String::new();
-    //     d.read_to_string(&mut s).unwrap();
-    //     println!("{}", s);
-    // } else {
-    //     println!("unknown command: {}", args[1])
-    // }
 }
