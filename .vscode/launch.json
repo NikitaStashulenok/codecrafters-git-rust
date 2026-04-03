@@ -1,0 +1,47 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+
+        {
+            "name": "Debug executable 'codecrafters-git'",
+            "type": "lldb",
+            "request": "launch",
+            "cargo": {
+                "args": [
+                    "run",
+                    "--bin=codecrafters-git"
+                ]
+            },
+            "args": []
+        },
+        {
+            "name": "Debug executable cc-git",
+            "type": "lldb",
+            "request": "launch",
+            "cargo": {
+                "args": [
+                    "run",
+                ]
+            },
+            "args": [
+                "cat-file",
+                "-p",
+                "3b18e512dba79e4c8300dd08aeb37f8e728b8dad"
+            ]
+        },
+        {
+            "name": "Debug unit tests in executable 'codecrafters-git'",
+            "type": "lldb",
+            "request": "launch",
+            "cargo": {
+                "args": [
+                    "test",
+                    "--bin=codecrafters-git"
+                ]
+            }
+        }
+    ]
+}
