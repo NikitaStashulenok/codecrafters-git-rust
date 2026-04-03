@@ -50,13 +50,13 @@ pub(crate) fn invoke(name_only: bool, tree_hash: &str) -> anyhow::Result<()> {
                     let hash = hex::encode(&hashbuf);
                     let object = Object::read(&hash)
                         .with_context(|| format!("read object for tree entry {hash}"))?;
-                    write!(stdout, "{mode:0>6} {} {hash}\n", object.kind)
+                    write!(stdout, "{mode:0>6} {} {hash} ", object.kind)
                         .context("write tree entry to stdout")?;
                     stdout
                         .write_all(name)
                         .context("write tree entry to stdout")?;
                 }
-                writeln!(stdout, " ").context("write newline to stdout")?;
+                write!(stdout, "\n").context("write newline to stdout")?;
             }
         }
         _ => anyhow::bail!("don't yet know how to ls: {}", object.kind),
