@@ -4,25 +4,16 @@ use std::path::PathBuf;
 
 pub(crate) mod commands;
 pub(crate) mod objects;
-/// Simple program to greet a person
+
 #[derive(Parser, Debug)]
 #[command(version, about, long_about = None)]
 struct Args {
-    // /// Name of the person to greet
-    // #[arg(short, long)]
-    // name: String,
-
-    // /// Number of times to greet
-    // #[arg(short, long, default_value_t = 1)]
-    // count: u8,
     #[command(subcommand)]
     command: Command,
 }
 
-/// Doc comment
 #[derive(Debug, Subcommand)]
 enum Command {
-    /// Doc comment
     Init,
     CatFile {
         #[clap(short = 'p')]
