@@ -13,4 +13,3 @@ flate2 = "1.0.34"                                # compression
 hex = "0.4.3"
 sha1 = "0.11.0"
 thiserror = "1.0.38"                             # error handling
-whoami = "2.1.1"
