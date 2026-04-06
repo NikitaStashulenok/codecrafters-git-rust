@@ -92,7 +92,7 @@ fn write_tree_for(path: &Path) -> anyhow::Result<Option<[u8; 20]>> {
         tree_object.extend(mode.as_bytes());
         // tree_object.push(b'\0');
         tree_object.extend(file_name.as_encoded_bytes());
-        // tree_object.push(b' ');
+        tree_object.push(0);
         tree_object.extend(hash);
     }
     if tree_object.is_empty() {
