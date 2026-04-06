@@ -58,7 +58,7 @@ fn write_tree_for(path: &Path) -> anyhow::Result<Option<[u8; 20]>> {
         }
 
         let mode = if meta.is_dir() {
-            "040000"
+            "40000"
         } else if meta.is_symlink() {
             "120000"
         } else if meta.permissions().mode() & 0o111 != 0 {
@@ -90,7 +90,7 @@ fn write_tree_for(path: &Path) -> anyhow::Result<Option<[u8; 20]>> {
             hash
         };
         tree_object.extend(mode.as_bytes());
-        tree_object.push(0);
+        tree_object.push(b' ');
         tree_object.extend(file_name.as_encoded_bytes());
         tree_object.push(0);
         tree_object.extend(hash);
