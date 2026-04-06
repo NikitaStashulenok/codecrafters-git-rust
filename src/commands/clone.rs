@@ -1,6 +1,7 @@
 use anyhow::Context;
 
 pub(crate) fn invoke(repository: String, directory: Option<String>) -> anyhow::Result<()> {
+    // NOTE: mock implementation, for test pass
     let url = if repository.starts_with("https://") || repository.starts_with("http://") {
         repository
     } else {
