@@ -16,29 +16,29 @@ struct Args {
 enum Command {
     Init,
     CatFile {
-        #[clap(short = 'p')]
+        #[arg(short = 'p')]
         pretty_print: bool,
 
         object_hash: String,
     },
     HashObject {
-        #[clap(short = 'w')]
+        #[arg(short = 'w')]
         write: bool,
 
         file: PathBuf,
     },
     LsTree {
-        #[clap(long)]
+        #[arg(long)]
         name_only: bool,
 
         tree_hash: String,
     },
     WriteTree,
     CommitTree {
-        #[clap(short = 'm')]
+        #[arg(short = 'm')]
         message: String,
 
-        #[clap(short = 'p')]
+        #[arg(short = 'p')]
         parent_hash: Option<String>,
 
         tree_hash: String,
